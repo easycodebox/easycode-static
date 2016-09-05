@@ -1,0 +1,62 @@
+.pagnation {
+	text-align: center;
+}
+.pagnation li {
+	display: inline;
+}
+.pagnation li a {
+	border: 1px solid #7F7F7F;
+	color: #4D4D4D;
+	margin: 3px;
+	padding: 3px 6px;
+	text-decoration: none;
+}
+.pagnation li span {
+	-x-system-font: none;
+	color: #4D4D4D;
+	font-size: 12px;
+	font-size-adjust: none;
+	margin: 3px;
+	padding: 3px 6px;
+	text-decoration: none;
+}
+.pagnation li a:hover {
+	background-color: #999;
+	border: 1px solid #999;
+	color: #4D4D4D;
+}
+.pagnation .current a {
+	background-color: #666;
+	border: 1px solid #666;
+	color: #FFF;
+	font-weight: bold;
+	margin: 2px;
+}
+.pagnation .current a:hover {
+	background-color: #666;
+	border: 1px solid #666;
+	color: #FFF;
+	cursor: text;
+	font-weight: bold;
+	margin: 2px;
+}
+.pagnation .disabled a {
+	border: 1px solid #BBB;
+	color: #BBB;
+	margin: 2px;
+}
+.pagnation .disabled a:hover {
+	background: #f9f9f9 none repeat scroll 0 0;
+	border: 1px solid #BBB;
+	color: #BBB;
+	cursor: text;
+}
+
+.load-div {
+    height: 40px;
+    display: none;
+}
+.load-div.page-loading {
+    display: block;
+    background: 10% center no-repeat url(imgs/dot_loading.gif);
+}

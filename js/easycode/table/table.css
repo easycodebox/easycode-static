@@ -1,0 +1,85 @@
+.main-table-div {
+	overflow: hidden;
+	position: relative;
+}
+.main-table-div img {
+	vertical-align: middle;
+}
+.data-table-div {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.header-table, .data-table {
+	background-color: #f9f9f9;
+	text-align: center;
+	border-collapse: collapse;
+	border-left: 1px solid #e1e1e1;
+}
+.header-table {
+	border-top: 1px solid #e1e1e1;
+}
+.table-th, .table-td, .no-data-td {
+	border-bottom: 1px solid #e1e1e1;
+	border-right: 1px solid #e1e1e1;
+	padding: 0 2px;
+}
+.sort-th {
+	padding: 0 14px;
+}
+.table-cell {
+	overflow: hidden;
+	text-align: center;
+	font-size: 12px;
+	margin: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	word-wrap: normal;
+}
+.th-row {
+	height: 30px;
+	line-height: 30px;
+	background-color: #eee;
+}
+.th-row .table-th {
+	font-weight: bold;
+}
+.td-row {
+	height: 30px;
+	line-height: 30px;
+}
+.column-move-line {
+  position: absolute;
+  width: 1px;
+  height: 10000px;
+  top: 0;
+  cursor: e-resize;
+  background: none repeat scroll 0 0 #aac8e7;
+}
+.septal-color {
+	background-color: #eaf2ff;
+}
+.tr-hover {
+	background-color: #cdd9ff;
+}
+.th-hover {
+	background-color: #cdd9ff;
+	cursor: pointer;
+}
+.checked-row {
+	background-color: #c1cfe2;
+}
+.sort-both {
+	background-image: url(imgs/sort_both.png);
+	background-position: right center;
+	background-repeat: no-repeat;
+}
+.sort-asc {
+	background-image: url(imgs/sort_asc.png);
+	background-position: right center;
+	background-repeat: no-repeat;
+}
+.sort-desc {
+	background-image: url(imgs/sort_desc.png);
+	background-position: right center;
+	background-repeat: no-repeat;
+}
