@@ -1581,21 +1581,7 @@
     	var ajaxSuccess = opts.success;
     	opts.success = function(data, textStatus, jqXHR) {
     		var thisObj = this,
-    			convertData = data,	//转换类型后的data。顾及到客户端传参dataType=html时，服务端因为异常返回JSON格式的错误提示信息，此时需要转换data为JSON类型，并弹出框提示
-    			dataType = this.dataTypes ? this.dataTypes[1] ? this.dataTypes[1] : this.dataTypes[0] : null;
-			if(dataType) {
-				//if(dataType === "script") {
-				//	//如果是返回类型是script，则直接跳出。因为jquery已经初始化过返回的脚本数据
-				//	return;
-				//}
-				if(dataType === "json" && utils.isString(data)) {
-					try{
-						data = JSON.parse(data);
-					}catch(err) {
-						
-					}
-				}
-			}
+    			convertData = data;	//转换类型后的data。顾及到客户端传参dataType=html时，服务端因为异常返回JSON格式的错误提示信息，此时需要转换data为JSON类型，并弹出框提示
     		
 			/**
 			 *ajax请求返回数据的处理,例如异常处理
@@ -1645,7 +1631,7 @@
 					}
 					return false;
 				}
-			}else {
+			} else {
 				sucFunc();
 				return true;
 			}
