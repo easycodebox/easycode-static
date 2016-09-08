@@ -6,6 +6,21 @@
 	
 	var $win = $(window);
 	
+	window.BaseData = window.BaseData || {
+		path: "/",	//项目的根路径
+		imgUrl: "/",	//图片地址路径
+		tmpPath: "tmp",	//临时文件存放的文件名
+		userInfo: null,
+		suc: "0",	//请求返回成功的标识
+		noLogin: "2",//Ajax请求返回未登录状态
+		code: "code",   	//code的key值
+		msg: "msg",     	//msg的key值
+		data: "data",   	//data的key值
+		init: function(data) {
+			return utils.extend(this, data);
+		}
+	};
+	
 	window.utils = {
 		browser: (function() {
 			var ua = navigator.userAgent.toLowerCase(), s, data = {};
@@ -1545,22 +1560,25 @@
         }
     });
     $.ajaxSetup({
-    	traditional: true, //Jquery ajax请求时，用传统方式组装参数。设置此值后，参数不能传嵌套数组
+    	//traditional: true, //Jquery ajax请求时，用传统方式组装参数。设置此值后，参数不能传嵌套数组
 		login: function(data, textStatus, jqXHR) {
 			//Ajax请求失败后显示登录页面
 			top.window.location.reload(true);
 		},
     	error: function(XMLHttpRequest, textStatus, errorThrown){
-			var dataType = this.dataTypes ? this.dataTypes[1] ? this.dataTypes[1] : this.dataTypes[0] : null;
+    		/*
+    		var dataType = this.dataTypes ? this.dataTypes[1] ? this.dataTypes[1] : this.dataTypes[0] : null;
 			if(dataType == "html" && utils.isString(XMLHttpRequest.responseText)) {
 				this.success(XMLHttpRequest.responseText, textStatus, XMLHttpRequest);
 			}else {
-				//$.alert("error", "系统错误!");
 				if (window.console) {
-					console.error(this.url, "请求异常");
+					//console.error(this.url, "请求异常");
 					console.info(errorThrown);
 				}
 			}
+			*/
+    		//注释掉上面代码，不删除的原因是需要校验是否对以前的代码产生影响
+    		console.info(errorThrown);
 		}
     });
 	/**
