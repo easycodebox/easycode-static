@@ -1736,7 +1736,7 @@
 	 */
 	String.prototype.format = function () {
 		var opts = {
-				model: String.EMPTY_INDEX_MODEL | String.NUM_INDEX_MODEL |　String.KEY_VALUE_MODEL,
+				model: String.EMPTY_INDEX_MODEL | String.NUM_INDEX_MODEL | String.KEY_VALUE_MODEL,
 				defaultVal: ""
 			}, 
 			args;
