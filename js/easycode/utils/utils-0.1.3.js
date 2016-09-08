@@ -1737,7 +1737,7 @@
 			}, 
 			args;
 		//判断第一个参数是否是配置项
-		if (arguments.length > 0) {
+		if (arguments.length > 0 && utils.isObject(arguments[0])) {
 			var obj = Object.keys(arguments[0]);
 			if (obj.length == 1 && (obj.indexOf("model") > -1 || obj.indexOf("defaultVal") > -1)
 					|| obj.length == 2 && obj.indexOf("model") > -1 && obj.indexOf("defaultVal") > -1) {
