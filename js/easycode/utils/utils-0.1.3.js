@@ -1560,7 +1560,7 @@
         }
     });
     $.ajaxSetup({
-    	//traditional: true, //Jquery ajax请求时，用传统方式组装参数。设置此值后，参数不能传嵌套数组
+    	traditional: true, //Jquery ajax请求时，用传统方式组装参数。设置此值后，参数不能传嵌套数组
 		login: function(data, textStatus, jqXHR) {
 			//Ajax请求失败后显示登录页面
 			top.window.location.reload(true);
