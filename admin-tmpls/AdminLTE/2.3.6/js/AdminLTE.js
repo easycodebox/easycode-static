@@ -27,6 +27,15 @@ if (typeof jQuery === "undefined") {
  */
 $.AdminLTE = {};
 
+/**
+ * 自定义配置
+ */
+var AdminLTEOptions = AdminLTEOptions || {
+	animationSpeed: 300,
+	//关闭bootstrap的自动初始化tooltip功能 - 为了提升性能
+	enableBSToppltip: false
+};
+
 /* --------------------
  * - AdminLTE Options -
  * --------------------
