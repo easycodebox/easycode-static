@@ -5,46 +5,46 @@
 (function ($) {
 
     function init(target) {
-        var settings = target.UI_page("settings");
-        if (settings.waterfall || settings.partSize && settings.partSize < settings.pageSize) {
+        var options = target.UI_page("options");
+        if (options.waterfall || options.partSize && options.partSize < options.pageSize) {
             //添加瀑布流的加载项
-            settings.loadingObj = $('<div class="load-div page-loading"></div>');
-            target.html(settings.loadingObj);
-            if (settings.waterfall) {
-                settings.partSize = null;
-                settings.partIndex = null;
+            options.loadingObj = $('<div class="load-div page-loading"></div>');
+            target.html(options.loadingObj);
+            if (options.waterfall) {
+                options.partSize = null;
+                options.partIndex = null;
             } else {
-                settings.partIndex = 1;
+                options.partIndex = 1;
             }
         } else {
-            settings.partSize = null;
-            settings.partIndex = null;
+            options.partSize = null;
+            options.partIndex = null;
         }
         target.UI_page("loadDate");
     }
     //oldScrollJq 上一次调用UI_page分页时传递的scrollJq对象
     function bindEvent(target, oldScrollJq) {
-        var settings = target.UI_page("settings");
-        if (settings.waterfall || settings.partSize) {
-            if (oldScrollJq && oldScrollJq.get(0) != settings.scrollJq.get(0)) {
+        var options = target.UI_page("options");
+        if (options.waterfall || options.partSize) {
+            if (oldScrollJq && oldScrollJq.get(0) != options.scrollJq.get(0)) {
             	//如果两次调用传递的参数不一样则卸载之前绑定的事件
                 oldScrollJq.off("scroll.page");
             }
-            if (!oldScrollJq || oldScrollJq.get(0) != settings.scrollJq.get(0)) {
-                settings.scrollJq.on("scroll.page", function () {
-                    if (settings.isLoading
-	    					|| !settings.hasMore
+            if (!oldScrollJq || oldScrollJq.get(0) != options.scrollJq.get(0)) {
+                options.scrollJq.on("scroll.page", function () {
+                    if (options.isLoading
+	    					|| !options.hasMore
 	    					|| target.css("display") === "none") return;
                     var pagerDivTop = target.offset().top,
-                        showHeight = settings.scrollJq.outerHeight() 
-                            + (settings.scrollJq.get(0).document ? settings.scrollJq.scrollTop() : settings.scrollJq.offset().top);
+                        showHeight = options.scrollJq.outerHeight() 
+                            + (options.scrollJq.get(0).document ? options.scrollJq.scrollTop() : options.scrollJq.offset().top);
                     if (showHeight >= pagerDivTop) {
-                        if (settings.partIndex) {
+                        if (options.partIndex) {
                             //如果是分流式加载则partIndex自增
-                            settings.partIndex += 1;
+                            options.partIndex += 1;
                         } else {
                             //瀑布流则pageNo自增
-                            settings.pageNo += 1;
+                            options.pageNo += 1;
                         }
                         target.UI_page("loadDate");
                     }
@@ -55,50 +55,50 @@
             //如果oldScrollJq有值，则直接跳过下面的绑定事件，因为已经绑定过
             return;
         }
-        if (settings.lazyload) {
+        if (options.lazyload) {
             utils.lazyload();
         }
         target.on("click.page", "a", function (e) {
             var pageNo = utils.parseInt($(this).attr("cur-page"));
             if (pageNo && pageNo > 0) {
-                settings.pageNo = pageNo;
-                target.UI_page("clear", settings);
+                options.pageNo = pageNo;
+                target.UI_page("clear", options);
                 target.UI_page("loadDate");
-                if (settings.pageScrollTop) {
+                if (options.pageScrollTop) {
                     $("html,body").animate({
-                        scrollTop: settings.pageScrollTop
+                        scrollTop: options.pageScrollTop
                     }, 100);
                 }
             }
         });
     }
-    $.fn.UI_page = function (settings, param) {
-        if (typeof settings == "string") {
-            var method = $.fn.UI_page.methods[settings];
+    $.fn.UI_page = function (options, param) {
+        if (typeof options == "string") {
+            var method = $.fn.UI_page.methods[options];
             if (method) {
                 return method(this, param);
             }
         }
-        settings = $.extend({}, $.fn.UI_page.defaults, settings);
-        settings.scrollJq = settings.scrollJq || $(window);
+        options = $.extend({}, $.fn.UI_page.defaults, options);
+        options.scrollJq = options.scrollJq || $(window);
         return this.each(function () {
             var $this = $(this),
                 data = $this.data("ui-page");
             if (data) {
-                var oldScrollJq = data.settings.scrollJq;
-                $.extend(data.settings, settings);
+                var oldScrollJq = data.options.scrollJq;
+                $.extend(data.options, options);
                 init($this);
                 bindEvent($this, oldScrollJq);
             } else {
-                data = $this.data("ui-page", { settings: settings });
+                data = $this.data("ui-page", { options: options });
                 init($this);
                 bindEvent($this);
             }
         });
     };
     $.fn.UI_page.methods = {
-        settings: function (jq) {
-            return jq.data("ui-page").settings;
+        options: function (jq) {
+            return jq.data("ui-page").options;
         },
         destroy: function (jq) {
             return jq.each(function () {
@@ -109,63 +109,63 @@
             return jq.each(function () {
                 var self = this,
                     $self = $(self),
-					settings = $self.UI_page("settings"),
+					options = $self.UI_page("options"),
 					params = params || {};
-                if (settings.isLoading == true)
+                if (options.isLoading == true)
                     return;
                 else
-                    settings.isLoading = true;
-                if (settings.loadingObj)
-                    settings.loadingObj.show();
-                if (settings.params) {
-                    if (utils.isFunction(settings.params))
-                        params = settings.params.call(self);
+                    options.isLoading = true;
+                if (options.loadingObj)
+                    options.loadingObj.show();
+                if (options.params) {
+                    if (utils.isFunction(options.params))
+                        params = options.params.call(self);
                     else
-                        params = settings.params;
+                        params = options.params;
                 }
-                params.pageNo = settings.pageNo;
-                params.pageSize = settings.pageSize;
-                if (settings.partSize) {
-                    params.partIndex = settings.partIndex;
-                    params.partSize = settings.partSize;
+                params.pageNo = options.pageNo;
+                params.pageSize = options.pageSize;
+                if (options.partSize) {
+                    params.partIndex = options.partIndex;
+                    params.partSize = options.partSize;
                 }
-                if (settings.data) {
+                if (options.data) {
                     //本地数据分页
-                    settings.totalCount = settings.data.length;
+                    options.totalCount = options.data.length;
                     var pageData = [],
-						pageStart = settings.pageSize * (settings.pageNo - 1);
-                    if (settings.waterfall) {
-                        pageData = settings.data.slice(pageStart, pageStart + settings.pageSize);
-                        if (settings.totalCount <= settings.pageSize * settings.pageNo) {
-                            settings.hasMore = false;
+						pageStart = options.pageSize * (options.pageNo - 1);
+                    if (options.waterfall) {
+                        pageData = options.data.slice(pageStart, pageStart + options.pageSize);
+                        if (options.totalCount <= options.pageSize * options.pageNo) {
+                            options.hasMore = false;
                         }
-                    } else if (settings.partSize) {
-                        var showStart = pageStart + (settings.partIndex - 1) * settings.partSize,
-			            	showTotal = showStart + settings.partSize;
-                        pageData = settings.data.slice(showStart, showTotal);
-                        if (settings.pageSize <= settings.partIndex * settings.partSize
-							|| settings.totalCount <= showTotal) {
-                            settings.hasMore = false;
+                    } else if (options.partSize) {
+                        var showStart = pageStart + (options.partIndex - 1) * options.partSize,
+			            	showTotal = showStart + options.partSize;
+                        pageData = options.data.slice(showStart, showTotal);
+                        if (options.pageSize <= options.partIndex * options.partSize
+							|| options.totalCount <= showTotal) {
+                            options.hasMore = false;
                             $self.UI_page("fix");
                         }
                     } else {
-                        pageData = settings.data.slice(pageStart, pageStart + settings.pageSize);
+                        pageData = options.data.slice(pageStart, pageStart + options.pageSize);
                         $self.UI_page("fix");
                     }
-                    if (settings.loadingObj)
-                        settings.loadingObj.hide();
-                    if (utils.isFunction(settings.suc))
-                        settings.suc.call(self, pageData, settings);
-                    if (utils.isFunction(settings.success))
-                        settings.success.call(self, pageData, settings);
-                    if (settings.lazyload) {
-                        settings.scrollJq.scroll();
+                    if (options.loadingObj)
+                        options.loadingObj.hide();
+                    if (utils.isFunction(options.suc))
+                        options.suc.call(self, pageData, options);
+                    if (utils.isFunction(options.success))
+                        options.success.call(self, pageData, options);
+                    if (options.lazyload) {
+                        options.scrollJq.scroll();
                     }
-                    settings.isLoading = false;
+                    options.isLoading = false;
                 } else {
                     //ajax请求分页 
                     $.ajax({
-                        url: settings.url,
+                        url: options.url,
                         data: params,
                         type: "POST",
                         success: function (data, textStatus, jqXHR) {
@@ -184,54 +184,54 @@
 	                                    ? data[BaseData.data] : !data[BaseData.data].data ? [] : utils.isArray(data[BaseData.data].data)
 	                                    ? data[BaseData.data].data : [data[BaseData.data].data];
                                 if (data[BaseData.data] && data[BaseData.data].totalCount) {
-                                    settings.totalCount = data[BaseData.data].totalCount;
+                                    options.totalCount = data[BaseData.data].totalCount;
                                 } else {
-                                    settings.totalCount = null;
+                                    options.totalCount = null;
                                 }
-                                if (settings.waterfall) {
-                                    if (list.length == 0 || list.length < settings.pageSize
-	                                    || settings.totalCount && settings.totalCount == settings.pageSize * settings.pageNo) {
-                                        settings.hasMore = false;
+                                if (options.waterfall) {
+                                    if (list.length == 0 || list.length < options.pageSize
+	                                    || options.totalCount && options.totalCount == options.pageSize * options.pageNo) {
+                                        options.hasMore = false;
                                     }
-                                } else if (settings.partSize) {
-                                    var showTotal = (settings.pageNo - 1) * settings.pageSize
-											+ settings.partIndex * settings.partSize;
-                                    if (settings.pageSize <= settings.partIndex * settings.partSize
-										|| settings.totalCount <= showTotal) {
-                                        settings.hasMore = false;
+                                } else if (options.partSize) {
+                                    var showTotal = (options.pageNo - 1) * options.pageSize
+											+ options.partIndex * options.partSize;
+                                    if (options.pageSize <= options.partIndex * options.partSize
+										|| options.totalCount <= showTotal) {
+                                        options.hasMore = false;
                                         $self.UI_page("fix");
                                     }
                                 } else {
                                     $self.UI_page("fix");
                                 }
-                                if (utils.isFunction(settings.suc))
-                                    settings.suc.call(self, data, settings, textStatus, jqXHR);
+                                if (utils.isFunction(options.suc))
+                                    options.suc.call(self, data, options, textStatus, jqXHR);
                             }
-                            if (settings.loadingObj)
-                                settings.loadingObj.hide();
-                            if (utils.isFunction(settings.success))
-                                settings.success.call(self, data, settings, textStatus, jqXHR);
-                            if (settings.lazyload) {
-                                settings.scrollJq.scroll();
+                            if (options.loadingObj)
+                                options.loadingObj.hide();
+                            if (utils.isFunction(options.success))
+                                options.success.call(self, data, options, textStatus, jqXHR);
+                            if (options.lazyload) {
+                                options.scrollJq.scroll();
                             }
-                            settings.isLoading = false;
+                            options.isLoading = false;
                         }
                     });
                 }
 
             });
         },
-        clear: function (jq, settings) {
+        clear: function (jq, options) {
             return jq.each(function () {
                 $(this).children(".page-group").remove();
-                if (settings.partSize)
-                    settings.partIndex = 1;
-                settings.hasMore = true;
+                if (options.partSize)
+                    options.partIndex = 1;
+                options.hasMore = true;
             });
         },
         fix: function (jq) {
             return jq.each(function () {
-                var s = $(this).UI_page("settings"), str = "";
+                var s = $(this).UI_page("options"), str = "";
                 if (s.totalCount && s.totalCount > 0 && s.pageSize && s.pageSize > 0) {
                     if (s.totalCount % s.pageSize == 0) {
                         s.totalPage = s.totalCount / s.pageSize;
@@ -329,7 +329,7 @@
         isLoading: false,  //判断当前页面是否正在加载数据，正在加载时不能请求数据
         loadingObj: null,  //加载数据时显示的加载项，不需要传值
         hasMore: true,     //瀑布流或分流式分页用此参数表名是否还有下一次瀑布产生
-        suc: function (data, settings, textStatus, jqXHR) {
+        suc: function (data, options, textStatus, jqXHR) {
             //只有请求返回成功才会执行此函数，成功的范畴为code为空或等于BaseData.suc
             /**
              *  data返回数据格式
@@ -339,7 +339,7 @@
              *  4、[]
              */
         },
-        success: function (data, settings, textStatus, jqXHR) {
+        success: function (data, options, textStatus, jqXHR) {
             //不管请求成功或失败都会执行此函数
             /**
              *  data返回数据格式
