@@ -378,7 +378,7 @@
 		 *  3. utils.fmtDecimal(1.567, 2, true)
 		 * 	1. utils.fmtDecimal(1.567, 2, true, "floor")
 		 */
-		fmtDecimal: function(val, digit, removeZero, roundMode, defaultVal){
+		fmtDecimal: function(val, digit, removeZero, roundMode, defaultVal) {
 			if(val == null) return defaultVal == null ? null : defaultVal;
 			val = utils.parseFloat(val);
 			digit = digit && digit > 0 ? digit : 0;
@@ -439,6 +439,29 @@
 			else {
 				return val.substr(-digit);
 			}
+		},
+		/**
+		 * 格式化日期。
+		 * value可以是长整数、字符窜、日期类型，只要能被自动转换成Date都行。
+		 * format输出的日期格式
+		 */
+		fmtDate: function(value, format) {
+			var date;
+			if(value != null) {
+				if(utils.isNumber(value)) {
+					date = new Date(value);
+				}else if(value instanceof Date) {
+					date = value;
+				}else if(utils.isString(value)) {
+					if(/^\d+$/.test(value)) {
+						date = new Date(parseInt(value));
+					}else {
+						var num = Date.parse(value);
+						date = isNaN(num) ? null : new Date(num);
+					}
+				}
+			}
+			return date && date.format(format);
 		},
 		/**
 		 * expression 对象导航表达式	例：utils.ognl({per: {name: "wang"}}, "per.name");
