@@ -41,7 +41,7 @@
 				$this.removeClass(removeClass).addClass(addClass);
 				
 				var $target = !opts.targetClass ? $this
-						: $this.closest("[" + opts.trAttr + "]").find("." + opts.targetClass);
+						: $this.closest(opts.trSelector).find("." + opts.targetClass);
 				if($rmObj.targetText)
 					$target.text($rmObj.targetText);
 				if($addObj.targetClass && $rmObj.targetClass) {
@@ -60,13 +60,13 @@
 					vals.push($(this).val());
 				});
 			}else {
-				var val = $this.closest("[" + opts.trAttr + "]").attr(opts.trAttr);
+				var val = $this.closest(opts.trSelector).find("input[name={}]".format(opts.idsKey)).val();
 				if(val)
 					vals.push(val);
 			}
 			s.data[opts.idsKey] = vals;
 		}
-		self.off(".UI_switch").on("click.UI_switch", function() {
+		self.off(".UI_switch").on("click.UI_switch", opts.srcSelector, function() {
 			var _this = this;
 			if($(_this).hasClass(opts.batchClass)
 					&& opts.getCheckedObjs().length == 0) {
@@ -131,15 +131,17 @@
 		batchClass: "batch",//批处理标识，含有class="batch" 表明此操作是批处理
 		targetClass: null,	//操作成功后修改的目标对象,null为当前触发事件的对象。批量操作必须传值
 		idsKey: "ids",		//主键参数的key值，用于获取已选中的对象函数（getCheckedObjs）和ajax请求传参的key值使用
-		trAttr: "trid",		//行属性值，数据为表数据的id
+		trSelector: "tr",	//行属性值，数据为表数据的id
 		url: null,			//如果change里面包含url参数则首选，否则用此url参数
+		srcSelector: null,//触发点击事件的代理对象
+		scopeSelector: null,//操作的dom范围
 		//获取已选中的对象
 		getCheckedObjs: function() {
-			return $("input[name={}]:checked".format(this.idsKey));
+			return $("{}input[name={}]:checked".format(this.scope ? this.scope + " " : "", this.idsKey));
 		},
 		//在batch操作模式下获取target对象
 		getTargetsOnBatchMode: function() {
-			var parents = this.getCheckedObjs().closest("[" + this.trAttr + "]");
+			var parents = this.getCheckedObjs().closest(this.trSelector);
 			return parents.find("." + this.targetClass);
 		},
 		change: {
