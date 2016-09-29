@@ -64,7 +64,7 @@
 				if(val)
 					vals.push(val);
 			}
-			s.data[opts.idsKey] = vals;
+			s.data[opts.ajaxKey || opts.idsKey] = vals;
 		}
 		self.on("click.UI_switch", opts.srcSelector, function() {
 			var _this = this;
@@ -130,7 +130,8 @@
     $.fn.UI_switch.defaults = {
 		batchClass: "batch",//批处理标识，含有class="batch" 表明此操作是批处理
 		targetClass: null,	//操作成功后修改的目标对象,null为当前触发事件的对象。批量操作必须传值
-		idsKey: "ids",		//主键参数的key值，用于获取已选中的对象函数（getCheckedObjs）和ajax请求传参的key值使用
+		idsKey: "ids",		//主键参数的key值，用于获取已选中的对象函数（getCheckedObjs）
+		ajaxKey: null,		//ajax请求传参的key值，为null则使用idsKey参数
 		trSelector: "tr",	//行属性值，数据为表数据的id
 		url: null,			//如果change里面包含url参数则首选，否则用此url参数
 		srcSelector: null,//触发点击事件的代理对象
