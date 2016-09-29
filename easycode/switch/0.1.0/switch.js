@@ -66,7 +66,7 @@
 			}
 			s.data[opts.idsKey] = vals;
 		}
-		self.off(".UI_switch").on("click.UI_switch", opts.srcSelector, function() {
+		self.on("click.UI_switch", opts.srcSelector, function() {
 			var _this = this;
 			if($(_this).hasClass(opts.batchClass)
 					&& opts.getCheckedObjs().length == 0) {
