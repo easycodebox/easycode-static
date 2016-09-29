@@ -50,8 +50,8 @@
 			}
 		}
 		
-		function bindData(s) {
-			s.data = s.data || {};
+		function bindData(s, defaultData) {
+			s.data = s.data || $.extend({}, defaultData);
 			if(!opts.idsKey) 
 				return;
 			var $this = $(this), vals = [];
@@ -84,7 +84,7 @@
 					if(successTmp)
 						successTmp.call(_this, data, textStatus, jqXHR);
 				};
-				bindData.call(_this, s);
+				bindData.call(_this, s, opts.defaultData[obverseClass]);
 				if(s.beforeAjax){
 					var back = s.beforeAjax.call(_this, s);
 					if(back === false)
@@ -108,7 +108,7 @@
 					if(successTmp)
 						successTmp.call(_this, data, textStatus, jqXHR);
 				};
-				bindData.call(_this, s);
+				bindData.call(_this, s, opts.defaultData[reverseClass]);
 				if(s.beforeAjax){
 					var back = s.beforeAjax.call(_this, s);
 					if(back === false)
@@ -155,7 +155,7 @@
 		 		url			: null,
 		 		type		: "POST",
 		 		cache 		: false,
-		 		data		: {status: "OPEN"}
+		 		data		: null
 			},
 			"switch-close": {
 				confirmMsg	: "确定禁用？",
@@ -167,7 +167,15 @@
 		 		url			: null,
 		 		type		: "POST",
 		 		cache 		: false,
-		 		data		: {status: "CLOSE"}
+		 		data		: null
+			}
+		},
+		defaultData: {
+			"switch-open": {
+				status: "OPEN"
+			},
+			"switch-close": {
+				status: "CLOSE"
 			}
 		}
     };
