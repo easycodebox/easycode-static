@@ -9,6 +9,39 @@
 
     // TOOLS DEFINITION
     // ======================
+    
+    /*========== 获取和判断idField/uniqueId值都改用成getNestProperty/hasOwnNestProperty  ==============*/
+    /**
+     * 判断是否有内嵌的属性,适用于field是对象类型。 如判断{"id":{"value":0,"desc":"启用","className":"OPEN"}} 判断是否有id.className
+     * add by WangXiaoJin
+     */
+    var hasOwnNestProperty = function(obj, nestProp) {
+    	if (obj == null || nestProp == null) return false;
+    	var tmp = obj, frags = nestProp.split(".");
+    	for (var i = 0; i < frags.length; i++) {
+			if (tmp.hasOwnProperty(frags[i])) {
+				tmp = tmp[frags[i]];
+			} else {
+				return false;
+			}
+		}
+    	return true;
+    };
+    /**
+     * 获取内嵌的属性,适用于field是对象类型。 如判断{"id":{"value":0,"desc":"启用","className":"OPEN"}} 获取id.className
+     * add by WangXiaoJin
+     */
+    var getNestProperty = function(obj, nestProp) {
+    	if (obj == null || nestProp == null) return null;
+    	var tmp = obj, frags = nestProp.split(".");
+    	for (var i = 0; i < frags.length; i++) {
+    		if (tmp == null) {
+				return null;
+			}
+			tmp = tmp[frags[i]];
+		}
+    	return tmp;
+    };
 
     var cachedWidth = null;
 
@@ -1638,7 +1671,7 @@
                 sprintf(' id="%s"', $.isArray(item) ? undefined : item._id),
                 sprintf(' class="%s"', style.classes || ($.isArray(item) ? undefined : item._class)),
                 sprintf(' data-index="%s"', i),
-                sprintf(' data-uniqueid="%s"', item[this.options.uniqueId]),
+                sprintf(' data-uniqueid="%s"', getNestProperty(item, this.options.uniqueId)),
                 sprintf('%s', data_),
                 '>'
             );
@@ -1734,7 +1767,7 @@
                         sprintf(' data-index="%s"', i) +
                         sprintf(' name="%s"', that.options.selectItemName) +
                         sprintf(' type="%s"', type) +
-                        sprintf(' value="%s"', item[that.options.idField]) +
+                        sprintf(' value="%s"', getNestProperty(item, that.options.idField)) +
                         sprintf(' checked="%s"', value === true ||
                         (value && value.checked) ? 'checked' : undefined) +
                         sprintf(' disabled="%s"', !column.checkboxEnabled ||
@@ -2422,10 +2455,10 @@
         for (i = len - 1; i >= 0; i--) {
             row = this.options.data[i];
 
-            if (row.hasOwnProperty(uniqueId)) { // uniqueId is a column
-                rowUniqueId = row[uniqueId];
-            } else if(row._data.hasOwnProperty(uniqueId)) { // uniqueId is a row data property
-                rowUniqueId = row._data[uniqueId];
+            if (hasOwnNestProperty(row, uniqueId)) { // uniqueId is a column
+                rowUniqueId = getNestProperty(row, uniqueId);
+            } else if(hasOwnNestProperty(row._data, uniqueId)) { // uniqueId is a row data property
+                rowUniqueId = getNestProperty(row._data, uniqueId);
             } else {
                 continue;
             }

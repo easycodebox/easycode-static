@@ -1878,8 +1878,8 @@
             if ((opts.model & String.KEY_VALUE_MODEL) > 0 && key.trim()) {
             	for (var i = 0; i < args.length; i++) {
 					var arg = args[i];
-					if (utils.isObject(arg) && (key in arg)) {
-                        val = arg[key];
+					if (utils.isObject(arg)) {
+                        val = utils.ognl(arg, key);
                         //val为null时则继续遍历，直到碰到有值为止
 						if (val != null) {
 							break;
