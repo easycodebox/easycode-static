@@ -544,8 +544,8 @@
 		},
 		escape: function (val) {
 		    if (!utils.isString(val)) return val;
-		    return val.replace(/[<>&"]/g, function (c) {
-		        return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c];
+		    return val.replace(/[<>&"'`]/g, function (c) {
+		        return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', '\'': '&#039;', '`': '&#x60;' }[c];
 		    });
 		},
 		unescape: function (val) {
