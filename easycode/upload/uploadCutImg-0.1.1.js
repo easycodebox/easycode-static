@@ -1,6 +1,4 @@
 /**
- * 
- * 注意：依赖于lhdialog插件
  * @author WangXiaoJin
  * 
  */
