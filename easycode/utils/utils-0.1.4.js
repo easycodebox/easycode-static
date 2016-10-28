@@ -192,7 +192,7 @@
 	    //获取文件名
 	    fileName: function(file){
 	    	if(!file) return file;
-	    	var t = file.replace("\\", "/"),
+	    	var t = file.replace(/\\/g, "/"),
 	    		start = t.lastIndexOf("/"),
 	    		end = t.lastIndexOf(".");
 			return t.substring(start == -1 ? 0 : start + 1, end);
