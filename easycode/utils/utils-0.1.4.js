@@ -1632,7 +1632,7 @@
 			 *	code = BaseData.suc或者为空 都会执行suc、ajaxSuccess函数，
 			 *	当code不等于空且不等于BaseData.suc则执行fail、ajaxSuccess函数
 			 **/
-			if(utils.isString(data) &&  
+			if(utils.isString(data) && this.contents.json && 
 					this.contents.json.test(opts.mimeType || jqXHR.getResponseHeader("content-type"))) {
 				try{
 					convertData = JSON.parse(data);
