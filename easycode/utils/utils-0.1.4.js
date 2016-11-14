@@ -62,7 +62,7 @@
 			document.getElementsByTagName("head")[0].appendChild(script);
 		},
 		runJs: function(url, callback){
-			loadJs(url, function(){
+			this.loadJs(url, function(){
 				document.getElementsByTagName("head")[0].removeChild(this);
 				if (callback){
 					callback();
