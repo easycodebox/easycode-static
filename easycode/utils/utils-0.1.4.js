@@ -1609,6 +1609,7 @@
 	 * 扩展ajax函数,用于处理返回code信息
 	 * settings = {
 	 * 		tips : false,		//tips = false：就算code为非空值也不显示提示信息，默认显示提示信息
+	 * 		showType: "msg",	//默认以 $.msg() 格式显示信息，可以修改为"alert"用 $.alert() 显示信息
 	 * 		sucTips	: false,	//当返回的code为suc时，不会显示提示信息，默认显示提示信息
 	 * 		exeSuc	: false,	//操作成功后也不会执行suc函数，默认执行
 	 * 		exeFail	: false,	//操作失败后也不会执行fail函数，默认执行
@@ -1642,16 +1643,18 @@
 			}
 			
 			var sucFunc = function() {
-				if(opts.exeSuc !== false && typeof opts.suc == "function")
-					opts.suc.call(thisObj, data, textStatus, jqXHR);
-				if(typeof ajaxSuccess == "function")
-					ajaxSuccess.call(thisObj, data, textStatus, jqXHR);
-			}, failFunc = function() {
-				if(opts.exeFail !== false && typeof opts.fail == "function")
-					opts.fail.call(thisObj, data, textStatus, jqXHR);
-				if(typeof ajaxSuccess == "function")
-					ajaxSuccess.call(thisObj, data, textStatus, jqXHR);
-			};
+					if(opts.exeSuc !== false && typeof opts.suc == "function")
+						opts.suc.call(thisObj, data, textStatus, jqXHR);
+					if(typeof ajaxSuccess == "function")
+						ajaxSuccess.call(thisObj, data, textStatus, jqXHR);
+				}, 
+				failFunc = function() {
+					if(opts.exeFail !== false && typeof opts.fail == "function")
+						opts.fail.call(thisObj, data, textStatus, jqXHR);
+					if(typeof ajaxSuccess == "function")
+						ajaxSuccess.call(thisObj, data, textStatus, jqXHR);
+				}, 
+				showMsg = opts.showType == "alert" ? $.alert : $.msg;
 			
 			if(convertData instanceof Object && convertData[BaseData.code] != null) {
 				var code = convertData[BaseData.code],
@@ -1659,7 +1662,7 @@
 				if(code == BaseData.suc) {
 					sucFunc();
 					if (opts.tips !== false && opts.sucTips !== false) {
-						$.msg("info", msg ? msg : this.sucMsg ? this.sucMsg : "操作成功！");
+						showMsg("info", msg ? msg : this.sucMsg ? this.sucMsg : "操作成功！");
 					}
 					return true;
 				}else if(code == BaseData.noLogin) {
@@ -1669,7 +1672,7 @@
 				}else {
 					failFunc();
 					if (opts.tips !== false) {
-						$.msg("error", msg ? msg : this.failMsg ? this.failMsg : "操作失败！");
+						showMsg("error", msg ? msg : this.failMsg ? this.failMsg : "操作失败！");
 					}
 					return false;
 				}
