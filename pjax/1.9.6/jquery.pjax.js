@@ -760,11 +760,21 @@ function executeScriptTags(scripts) {
   var existingScripts = $('script[src]')
 
   scripts.each(function() {
-    var src = this.src
+    var src = this.src,
+    	transient = $(this).attr('transient');
+    
     var matchedScripts = existingScripts.filter(function() {
       return this.src === src
     })
-    if (matchedScripts.length) return
+    if (matchedScripts.length) {
+    	if(transient !== 'true') {
+    		//script已经存在，且此script不是瞬态js，所以不需要再次加载
+    		return
+    	} else {
+    		//删除以前的script
+    		matchedScripts.remove();
+    	}
+    }
 
     var script = document.createElement('script')
     var type = $(this).attr('type')
@@ -773,7 +783,7 @@ function executeScriptTags(scripts) {
     //update by WangXiaoJin
     script.async = $(this).attr('async') !== undefined ? true : false;
     var done = false;
-	if ($(this).attr('cached') !== 'true') {
+	if (transient === 'true') {
 		script.onload = script.onreadystatechange = function() {
 			if (!done && (!script.readyState || script.readyState == 'loaded' || script.readyState == 'complete')){
 				done = true;
