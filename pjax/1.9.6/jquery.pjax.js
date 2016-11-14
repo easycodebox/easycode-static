@@ -736,10 +736,8 @@ function extractContainer(data, xhr, options) {
     obj.contents.find('title').remove()
 
     // Gather all script[src] elements
-    if (options.cacheScript) {
-    	obj.scripts = findAll(obj.contents, 'script[src]').remove()
-    	obj.contents = obj.contents.not(obj.scripts)
-	}
+    obj.scripts = findAll(obj.contents, 'script[src]').remove()
+    obj.contents = obj.contents.not(obj.scripts)
   }
 
   // Trim any whitespace off the title
@@ -772,7 +770,19 @@ function executeScriptTags(scripts) {
     var type = $(this).attr('type')
     if (type) script.type = type
     script.src = $(this).attr('src')
-    document.head.appendChild(script)
+    //update by WangXiaoJin
+    script.async = $(this).attr('async') !== undefined ? true : false;
+    var done = false;
+	if ($(this).attr('cached') !== 'true') {
+		script.onload = script.onreadystatechange = function() {
+			if (!done && (!script.readyState || script.readyState == 'loaded' || script.readyState == 'complete')){
+				done = true;
+				script.onload = script.onreadystatechange = null;
+				document.head.removeChild(this);
+			}
+		};
+	}
+	document.head.appendChild(script);
   })
 }
 
