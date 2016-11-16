@@ -1512,7 +1512,7 @@
 	 */
     $(document).off(".repeatSubmit").on({
         "ajaxSend.repeatSubmit": function (event, jqXHR, opts) {
-            if (opts.submitBtn = utils.$obj(opts.submitBtn)) {
+        	if ((opts.submitBtn = utils.$obj(opts.submitBtn)) && opts.submitBtn.length) {
             	//不修改默认行为，所以注释此行代码
                 //opts.submiting = opts.submiting != null ? opts.submiting : "{0}...";
                 opts.ingClass = opts.ingClass == null ? "submiting" : opts.ingClass + " submiting";
@@ -1554,7 +1554,7 @@
             }
         },
         "ajaxComplete.repeatSubmit": function (event, jqXHR, opts) {
-            if (opts.submitBtn && opts.submitBtn.data("submiting")) {
+        	if (opts.submitBtn && opts.submitBtn.length && opts.submitBtn.data("submiting")) {
             	var submitBtnData = opts.submitBtn.data();
             	if(--submitBtnData.submiting) return;
                 function changeVal($btn, isSbmtBtn) {
