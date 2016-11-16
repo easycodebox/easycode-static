@@ -5,4 +5,3 @@
 > 现在[easycode](./easycode)目录中比较常用的有：
 > * [utils.js](./easycode/utils) - 最常用的组件，日常开发中80%需要的功能性函数在里面都能找到。
 > * [page.js](./easycode/page) - 分页组件，提供了瀑布流分页和分流式分页。
-> * [upload.js](./easycode/upload) - 上传图片组件。
