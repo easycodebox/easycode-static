@@ -2,6 +2,8 @@
  * jQuery bValidator plugin
  *
  * http://bmauser.github.io/bvalidator/
+ * 
+ * 注：此文件已被修改，升级版本时需要注意。每个修改的地方都加了备注。
  */
 
 var bValidator = (function ($) {
@@ -582,8 +584,19 @@ var bValidator = (function ($) {
             // window.actionName()
             else if (typeof window[modifierAction.name] == 'function')
                 newVal = window[modifierAction.name].apply($input[0], applyParams);
-            else
-                this.throwException('undefined modifier function: ' + modifierAction.name);
+            else {
+            	//add by WangXiaoJin - 增加嵌套函数解析
+				try {
+					var fun = eval(modifierAction.name);
+					if(typeof fun == "function") {
+						newVal = fun.apply($input[0], applyParams);
+					} else {
+						this.throwException('undefined modifier function: ' + modifierAction.name);
+					}
+				} catch(err) {
+					this.throwException('undefined modifier function: ' + modifierAction.name);
+				}
+			}
 
             if (typeof newVal != 'undefined' && newVal != null) {
                 oldVal = $input.val();
@@ -625,8 +638,19 @@ var bValidator = (function ($) {
             // then try to call user defined function in global scope
             else if (typeof window[actionData.name] === 'function') {
                 ret = window[actionData.name].apply(actionData.$input[0], [actionData.inputValue].concat(actionData.params));
-            } else
-                this.throwException('undefined validation function: ' + actionData.name);
+            } else {
+            	//add by WangXiaoJin - 增加嵌套函数解析
+            	try {
+					var fun = eval(actionData.name);
+					if (typeof fun == "function") {
+						ret = fun.apply(actionData.$input[0], [actionData.inputValue].concat(actionData.params));
+					} else {
+						this.throwException('undefined validation function: ' + actionData.name);
+					}
+				} catch(err) {
+					this.throwException('undefined validation function: ' + actionData.name);
+				}
+            }
 
             return ret;
         },
