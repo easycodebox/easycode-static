@@ -496,7 +496,19 @@ var bValidator = (function ($) {
 
             // HTML5 attributes
             if (html5 && this.options.enableHtml5Attr){
-                actions = actions.concat(this.getHtml5Actions($input));
+            	//modified by WangXiaoJin - 增加改变html5 required规则优先级功能
+            	var html5Actions = this.getHtml5Actions($input);
+            	if (this.options.priorHtml5RequiredAttr) {
+            		for (var i = 0; i < html5Actions.length; i++) {
+            			if (html5Actions[i].name == 'required') {
+            				actions.splice(0, 0, html5Actions[i]);
+            			} else {
+            				actions[actions.length] = html5Actions[i];
+            			}
+            		}
+				} else {
+					actions = actions.concat(html5Actions);
+				}
             }
 
             return actions
@@ -1338,6 +1350,7 @@ bValidator.defaultOptions = (function () {
         skipValidation        : ':hidden, :disabled',
         html5ValidationOff    : true,
         enableHtml5Attr       : true,
+        priorHtml5RequiredAttr: false,	//WangXiaoJin - 当启用html5属性且标签含有required属性时，如果此参数设置为true，则required的优先级提升到最高，即required规则第一个校验
         useTheme              : '',
         forceValidationResult : null,
         noMsgIfExistsForInstance : [],
