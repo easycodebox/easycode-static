@@ -66,7 +66,7 @@
 			$target.on("compositionstart.limitValue", function(){
 				$(this).data("isIME", true);
 			}).on("compositionend.limitValue", function(){
-				$(this).data("isIME", false);
+				$(this).data("isIME", false).val(filterValue(this));
 			});
 		}
 	}
