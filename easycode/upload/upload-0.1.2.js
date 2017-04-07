@@ -182,7 +182,7 @@
 * 以下功能为与服务器进行交互功能
 例子1：处理后台传过来的额图片，重新生成宽高，图片div的宽高固定
 $("#uploadImgs").uploadImg({
-	picType: "findCate",
+	fileKey: "findCate",
 	picInput: "textVal",
 	picDiv: "uploadImgs",
 	uploadTitle: "up_img"
@@ -196,7 +196,7 @@ $("#uploadImgs").uploadImg({
 
 例子2：处理后台传过来的额图片，重新生成宽高，图片div的宽高不固定
 $("#uploadImgs").uploadImg({
-	picType: "findCate",
+	fileKey: "findCate",
 	picInput: "textVal",
 	picDiv: "uploadImgs",
 	uploadTitle: "up_img",
@@ -213,7 +213,8 @@ $("#uploadImgs").uploadImg({
 		id : null,
 		url : null,		//默认为BaseData.imgUrl + "/upload"
 		fileName : "files",
-		picType : false,
+		fileType : "PIC_TYPE",//文件类型
+		fileKey : false,    //定位文件的上传路径及校验规则关键字
 		responseUrl: null,	//默认为BaseData.path + "/blank.html"
 		imgRule : null,
 		syncRule : false,	//同步imgRule属性到picInput值中
@@ -339,8 +340,10 @@ $("#uploadImgs").uploadImg({
 		var _opts = $.extend({}, upDefaults, options);
 		if(!_opts.id)
 			_opts.id = "upload_img_" + new Date().getTime();
-		if(_opts.picType)
-			_opts.data.PIC_TYPE = _opts.picType;
+		if(_opts.fileType)
+			_opts.data.fileType = _opts.fileType;
+		if(_opts.fileKey)
+			_opts.data.fileKey = _opts.fileKey;
 		if(_opts.responseUrl)
 			_opts.data.responseUrl = _opts.responseUrl;
 		if(_opts.uploadTitle){
